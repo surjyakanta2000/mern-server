@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const Student = require("../Model/studentModel");
 const Teacher = require("../Model/techModel");
+const Admin = require("../Model/adminModel");
 const { genJwt } = require("../utils/generateToken");
 
 const schema = Joi.object({
@@ -34,6 +35,18 @@ exports.userLogin = async (req, res) => {
       .select("-techPassword");
     if (!teacherData) return res.status(404).send("invalid email or password");
     const token = genJwt(teacherData);
+    res
+      .header("x-auth-token", token)
+      .header("access-control-expose-headers", "x-auth-token")
+      .send({ message: "success" });
+  }
+  if (role === "admin") {
+    const adminData = await Admin.findOne({
+      adminEmail: email,
+      adminPassword: password,
+    }).select("-adminPassword");
+    if (!adminData) return res.status(404).send("invalid email or password");
+    const token = genJwt(adminData);
     res
       .header("x-auth-token", token)
       .header("access-control-expose-headers", "x-auth-token")

@@ -30,7 +30,6 @@ exports.getStudent = async (req, res) => {
 exports.specificStudent = async (req, res) => {
   const specificStudentData = await Student.findById(req.params.id)
     .populate("studentDept", "-__v")
-    .select("-studentPassword");
   res.status(200).send(specificStudentData);
 };
 exports.updateStudent = async (req, res) => {

@@ -22,7 +22,6 @@ exports.getTeacher = async (req, res) => {
 exports.specificTeacher = async (req, res) => {
   const specificTechData = await Teacher.findById(req.params.id)
     .populate("techDept", "-__v")
-    .select("-techPassword");
   res.status(200).send(specificTechData);
 };
 exports.updateTeacher = async (req, res) => {
