@@ -13,6 +13,7 @@ exports.addAttend = async (req, res) => {
       totalCls: 1,
       attendedCls: status == "p" ? 1 : 0,
       classTakenDate: clsDate,
+      lastStatus: status,
     });
     return res.json(data);
   }
@@ -25,6 +26,22 @@ exports.addAttend = async (req, res) => {
         attendedCls:
           status == "p" ? dataExist.attendedCls + 1 : dataExist.attendedCls,
         classTakenDate: clsDate,
+        lastStatus: status,
+      });
+    }
+    if (dataExist.classTakenDate === clsDate) {
+      await AttendModel.findByIdAndUpdate(dataExist._id, {
+        studentId: student,
+        clsCode: clsCode,
+        totalCls: dataExist.totalCls,
+        attendedCls:
+          status === dataExist.lastStatus
+            ? dataExist.attendedCls
+            : status === "p"
+            ? dataExist.attendedCls + 1
+            : dataExist.attendedCls - 1,
+        classTakenDate: clsDate,
+        lastStatus: status,
       });
     }
   }

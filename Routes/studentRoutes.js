@@ -5,7 +5,9 @@ const {
   validateAddStudent,
   validateUpdateStudent,
 } = require("../Middleware/validateStudent");
+const uploadProfilePic = require("../Middleware/uploadProfilePic");
 const idValidate = require("../Middleware/validateID");
+const { validateProfilePic } = require("../Middleware/validateProfilePic");
 
 studentRouter.post("/add", validateAddStudent, studentController.addStudent);
 studentRouter.get("/all", studentController.getStudent);
@@ -17,6 +19,14 @@ studentRouter.put(
   validateUpdateStudent,
   studentController.updateStudent
 );
+
+studentRouter.put(
+  "/profile/update/:id",
+  uploadProfilePic,
+  validateProfilePic,
+  studentController.updateProfile
+);
+
 studentRouter.delete(
   "/delete/:id",
   idValidate,

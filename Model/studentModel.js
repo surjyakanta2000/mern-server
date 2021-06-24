@@ -38,6 +38,10 @@ const studentSchema = mongoose.Schema({
     trim: true,
     required: true,
   },
+  profilePic: {
+    type: String,
+    trim: true,
+  },
   role: {
     type: String,
     required: true,

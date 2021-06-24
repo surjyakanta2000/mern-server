@@ -1,4 +1,6 @@
 const Student = require("../Model/studentModel");
+const fs = require("fs");
+const path = require("path");
 
 exports.addStudent = async (req, res) => {
   const {
@@ -28,8 +30,10 @@ exports.getStudent = async (req, res) => {
   return res.status(200).json(allStudent);
 };
 exports.specificStudent = async (req, res) => {
-  const specificStudentData = await Student.findById(req.params.id)
-    .populate("studentDept", "-__v")
+  const specificStudentData = await Student.findById(req.params.id).populate(
+    "studentDept",
+    "-__v"
+  );
   res.status(200).send(specificStudentData);
 };
 exports.updateStudent = async (req, res) => {
@@ -47,4 +51,40 @@ exports.getStudentForClass = async (req, res) => {
     studentSemester: sem,
   }).select("-studentPassword");
   res.status(200).send(specificStudentData);
+};
+
+exports.updateProfile = async (req, res) => {
+  const {
+    studentRoll,
+    studentName,
+    studentDept,
+    studentSemester,
+    studentEmail,
+    studentPhone,
+    studentPassword,
+  } = req.body;
+  const { path: profilePic } = req.file;
+
+  const prevStdData = await Student.findById(req.params.id);
+  if (
+    prevStdData.profilePic &&
+    prevStdData.profilePic !== undefined &&
+    prevStdData.profilePic !== null &&
+    prevStdData.profilePic !== profilePic
+  ) {
+    const deletePic = path.join(__dirname, `../${prevStdData.profilePic}`);
+    fs.unlinkSync(deletePic);
+  }
+
+  await Student.findByIdAndUpdate(req.params.id, {
+    studentRoll,
+    studentName,
+    studentDept,
+    studentSemester,
+    studentEmail,
+    studentPhone,
+    studentPassword,
+    profilePic,
+  });
+  res.status(200).send("Student Profile updated..");
 };

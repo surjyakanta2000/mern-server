@@ -19,6 +19,9 @@ const attendSchema = mongoose.Schema({
   classTakenDate: {
     type: String,
   },
+  lastStatus: {
+    type: String,
+  },
 });
 
 const AttendModel = mongoose.model("Attendance", attendSchema);
