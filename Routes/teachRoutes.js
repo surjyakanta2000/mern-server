@@ -5,8 +5,10 @@ const {
   validateAddTeach,
   validateUpdateTeach,
 } = require("../Middleware/validateTeacher");
-const idValidate = require("../Middleware/validateID");
 
+const idValidate = require("../Middleware/validateID");
+const uploadProfilePic = require("../Middleware/uploadProfilePic");
+const { validateProfilePic } = require("../Middleware/validateProfilePic");
 techRouter.post("/add", validateAddTeach, techController.addTeacher);
 techRouter.get("/all", techController.getTeacher);
 techRouter.get("/:id", idValidate, techController.specificTeacher);
@@ -15,6 +17,12 @@ techRouter.put(
   idValidate,
   validateUpdateTeach,
   techController.updateTeacher
+);
+techRouter.put(
+  "/profile/update/:id",
+  uploadProfilePic,
+  validateProfilePic,
+  techController.updateProfile
 );
 techRouter.delete("/delete/:id", idValidate, techController.deleteTeacher);
 
