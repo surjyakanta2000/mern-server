@@ -8,6 +8,15 @@ const attendSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Class",
   },
+  department: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Department",
+  },
+  semester: {
+    type: String,
+    trim: true,
+    required: true,
+  },
   totalCls: {
     type: Number,
     default: 0,
