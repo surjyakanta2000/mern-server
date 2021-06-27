@@ -47,6 +47,12 @@ const studentSchema = mongoose.Schema({
     required: true,
     default: "student",
   },
+  securityQuestion: {
+    type: String,
+  },
+  securityAnswer: {
+    type: String,
+  },
 });
 const Student = mongoose.model("Student", studentSchema);
 module.exports = Student;

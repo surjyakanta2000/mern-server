@@ -54,6 +54,14 @@ const techSchema = mongoose.Schema({
     lowercase: true,
     default: "teacher",
   },
+  securityQuestion: {
+    type: String,
+    default: "",
+  },
+  securityAnswer: {
+    type: String,
+    default: "",
+  },
 });
 const Teacher = mongoose.model("Teacher", techSchema);
 module.exports = Teacher;

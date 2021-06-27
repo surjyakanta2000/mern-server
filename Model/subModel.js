@@ -3,6 +3,7 @@ const subSchema = mongoose.Schema({
   subCode: {
     type: String,
     required: true,
+    uppercase: true,
     unique: true,
     trim: true,
   },

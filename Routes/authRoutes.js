@@ -1,13 +1,11 @@
 const express = require("express");
 const authRouter = express.Router();
 const authController = require("../Controllers/authController");
-// const {
-//   validateAddTeach,
-//   validateUpdateTeach,
-// } = require("../Middleware/validateTeacher");
-// const idValidate = require("../Middleware/validateID");
 
 authRouter.post("/login", authController.userLogin);
-// authRouter.get("/all", authController.getTeacher);
+
+authRouter.post("/usercheck", authController.userCheck);
+authRouter.post("/anscheck", authController.ansCheck);
+authRouter.patch("/resetpassword/:id", authController.resetPassword);
 
 module.exports = authRouter;

@@ -47,6 +47,8 @@ exports.updateProfile = async (req, res) => {
     techDOB,
     techAge,
     techGender,
+    securityQuestion,
+    securityAnswer,
   } = req.body;
   const { path: profilePic } = req.file;
 
@@ -72,6 +74,8 @@ exports.updateProfile = async (req, res) => {
     techDOB,
     techAge,
     techGender,
+    securityQuestion,
+    securityAnswer,
   });
   res.status(200).send("Teacher Profile updated..");
 };
