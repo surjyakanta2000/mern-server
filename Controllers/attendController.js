@@ -1,10 +1,55 @@
 const AttendModel = require("../Model/attendModel");
+const AttendDateWise = require("../Model/attendDateWise");
 const Student = require("../Model/studentModel");
 const _ = require("lodash");
 const { genAttendReport } = require("../utils/generateAttendReport");
 
 exports.addAttend = async (req, res) => {
-  const { clsCode, student, clsDate, status, department, semester } = req.body;
+  const {
+    clsCode,
+    student,
+    clsDate,
+    status,
+    department,
+    semester,
+    studentRoll,
+    studentName,
+  } = req.body;
+
+  const result = await AttendDateWise.findOne({
+    clsCode: clsCode,
+    clsDate: clsDate,
+  });
+  if (!result) {
+    await AttendDateWise.create({
+      clsCode,
+      clsDate,
+      data: [
+        {
+          studentRoll,
+          studentName,
+          status,
+        },
+      ],
+    });
+  } else {
+    const { data } = result;
+    const index = data.findIndex((d) => d.studentRoll === studentRoll);
+    if (index !== -1) {
+      data[index].status = status;
+    } else {
+      data.push({
+        studentRoll,
+        studentName,
+        status,
+      });
+    }
+
+    await AttendDateWise.findByIdAndUpdate(result._id, {
+      data: [...data],
+    });
+  }
+
   const dataExist = await AttendModel.findOne({
     studentId: student,
     clsCode: clsCode,
@@ -76,4 +121,10 @@ exports.getAttendForDept = async (req, res) => {
   const result = genAttendReport(data, students);
 
   res.status(200).json(result);
+};
+
+exports.getGetAttendDateWise = async (req, res) => {
+  const { id } = req.params;
+  const data = await AttendDateWise.find({ clsCode: id });
+  return res.json(data);
 };

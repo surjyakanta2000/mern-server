@@ -14,6 +14,7 @@ assignRouter.post(
 assignRouter.post("/response", uploadAssign, assignController.addStudentRes);
 assignRouter.get("/responses/:id", assignController.getResponses);
 assignRouter.get("/:id", validateId, assignController.getAssignment);
+assignRouter.get("/spec/:id", validateId, assignController.getAssignmentSpec);
 assignRouter.delete(
   "/delete/:id",
   validateId,

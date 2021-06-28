@@ -10,6 +10,8 @@ const idValidate = require("../Middleware/validateID");
 const { validateProfilePic } = require("../Middleware/validateProfilePic");
 
 studentRouter.post("/add", validateAddStudent, studentController.addStudent);
+studentRouter.get("/specstudent/:id", studentController.getStudentByRoll);
+
 studentRouter.get("/all", studentController.getStudent);
 studentRouter.get("/:dept/:sem", studentController.getStudentForClass);
 studentRouter.get("/:id", idValidate, studentController.specificStudent);

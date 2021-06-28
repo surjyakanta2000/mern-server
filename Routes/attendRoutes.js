@@ -6,5 +6,10 @@ const validateId = require("../Middleware/validateID");
 attendRouter.post("/add", attendController.addAttend);
 attendRouter.get("/student/:id", validateId, attendController.getAttend);
 attendRouter.get("/all/:id", validateId, attendController.getAttendForDept);
+attendRouter.get(
+  "/allattend/:id",
+  validateId,
+  attendController.getGetAttendDateWise
+);
 
 module.exports = attendRouter;

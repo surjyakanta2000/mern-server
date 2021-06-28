@@ -53,6 +53,13 @@ exports.getStudentForClass = async (req, res) => {
   res.status(200).send(specificStudentData);
 };
 
+exports.getStudentByRoll = async (req, res) => {
+  const student = await Student.findOne({
+    studentRoll: req.params.roll,
+  }).select("studentDept studentSemester");
+  return student;
+};
+
 exports.updateProfile = async (req, res) => {
   const {
     studentRoll,

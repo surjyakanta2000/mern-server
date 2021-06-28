@@ -26,6 +26,14 @@ const classSchema = mongoose.Schema({
     trim: true,
     required: true,
   },
+  clsMaterials: [
+    {
+      materialName: { type: String },
+      material: { type: String },
+      type: { type: String },
+      date: { type: String, default: new Date().toISOString().slice(0, 10) },
+    },
+  ],
 });
 const ClassModel = mongoose.model("Class", classSchema);
 module.exports = ClassModel;
