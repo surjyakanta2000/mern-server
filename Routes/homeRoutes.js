@@ -23,5 +23,10 @@ clsRouter.get("/uploads/materials/:fileName", (req, res) => {
   const absolutePath = path.join(__dirname, "../uploads/materials/");
   res.sendFile(`${absolutePath}${fileName}`);
 });
+clsRouter.get("/uploads/notices/:fileName", (req, res) => {
+  const fileName = req.params.fileName;
+  const absolutePath = path.join(__dirname, "../uploads/notices/");
+  res.sendFile(`${absolutePath}${fileName}`);
+});
 
 module.exports = clsRouter;

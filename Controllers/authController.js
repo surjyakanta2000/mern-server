@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const bcrypt = require("bcryptjs");
 const Student = require("../Model/studentModel");
 const Teacher = require("../Model/techModel");
 const Admin = require("../Model/adminModel");
@@ -29,41 +30,42 @@ exports.userLogin = async (req, res) => {
   if (role === "student") {
     const studentData = await Student.findOne({
       studentEmail: email,
-      studentPassword: password,
-    }).select("-studentPassword");
+    });
     if (!studentData) return res.json({ message: "Invalid email or password" });
-    const token = genJwt(studentData);
-    res
-      .header("x-auth-token", token)
-      .header("access-control-expose-headers", "x-auth-token")
-      .send({ message: "success" });
+    bcrypt.compare(studentData.studentPassword, password).then(() => {
+      const token = genJwt(studentData);
+      res
+        .header("x-auth-token", token)
+        .header("access-control-expose-headers", "x-auth-token")
+        .send({ message: "success" });
+    });
   }
   if (role === "teacher" || role === "hod") {
     const teacherData = await Teacher.findOne({
       techEmail: email,
-      techPassword: password,
-    })
-      .populate("techDept", "deptName")
-      .select("-techPassword");
+    }).populate("techDept", "deptName");
     if (!teacherData) return res.json({ message: "Invalid email or password" });
-    const token = genJwt(teacherData);
-    res
-      .header("x-auth-token", token)
-      .header("access-control-expose-headers", "x-auth-token")
-      .send({ message: "success" });
+    bcrypt.compare(teacherData.techPassword, password).then(() => {
+      const token = genJwt(teacherData);
+      res
+        .header("x-auth-token", token)
+        .header("access-control-expose-headers", "x-auth-token")
+        .send({ message: "success" });
+    });
   }
 
   if (role === "admin") {
     const adminData = await Admin.findOne({
       adminEmail: email,
-      adminPassword: password,
-    }).select("-adminPassword");
-    if (!adminData) return res.json({ message: "Invalid email or password" });
-    const token = genJwt(adminData);
-    res
-      .header("x-auth-token", token)
-      .header("access-control-expose-headers", "x-auth-token")
-      .send({ message: "success" });
+    });
+    if (!adminData) return res.json({ message: "Invalid email.." });
+    bcrypt.compare(adminData.adminPassword, password).then(() => {
+      const token = genJwt(adminData);
+      res
+        .header("x-auth-token", token)
+        .header("access-control-expose-headers", "x-auth-token")
+        .send({ message: "success" });
+    });
   }
 };
 

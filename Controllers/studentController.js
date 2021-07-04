@@ -1,6 +1,7 @@
 const Student = require("../Model/studentModel");
 const fs = require("fs");
 const path = require("path");
+const bcrypt = require("bcryptjs");
 
 exports.addStudent = async (req, res) => {
   const {
@@ -12,16 +13,35 @@ exports.addStudent = async (req, res) => {
     studentPhone,
     studentPassword,
   } = req.body;
-  await Student.create({
-    studentRoll,
-    studentName,
-    studentDept,
-    studentSemester,
-    studentEmail,
-    studentPhone,
-    studentPassword,
-  });
-  res.status(200).send("Student Created..");
+  await Student.findOne({ studentEmail: studentEmail })
+    .then((studentData) => {
+      if (studentData) {
+        console.log("Email Already Exists");
+      }
+      return bcrypt
+        .hash(studentPassword, 12)
+        .then((hashPassword) => {
+          const studentData = new Student({
+            studentRoll: studentRoll,
+            studentName: studentName,
+            studentDept: studentDept,
+            studentSemester: studentSemester,
+            studentEmail: studentEmail,
+            studentPhone: studentPhone,
+            studentPassword: hashPassword,
+          });
+          return studentData.save();
+        })
+        .then((result) => {
+          res.status(200).send("student Created!");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 exports.getStudent = async (req, res) => {
   const allStudent = await Student.find({})
@@ -69,6 +89,12 @@ exports.updateProfile = async (req, res) => {
     studentEmail,
     studentPhone,
     studentPassword,
+    studentAddress,
+    studentDOB,
+    studentAge,
+    studentGender,
+    securityQuestion,
+    securityAnswer,
   } = req.body;
   const { path: profilePic } = req.file;
 
@@ -92,6 +118,12 @@ exports.updateProfile = async (req, res) => {
     studentPhone,
     studentPassword,
     profilePic,
+    studentAddress,
+    studentDOB,
+    studentAge,
+    studentGender,
+    securityQuestion,
+    securityAnswer,
   });
   res.status(200).send("Student Profile updated..");
 };

@@ -6,7 +6,7 @@ const schema = Joi.object({
   techName: Joi.string().required().label("Name"),
   techDept: Joi.objectId().required().label("Department"),
   techEmail: Joi.string().required().label("Email"),
-  techPhone: Joi.string().required().label("Phone"),
+  techPhone: Joi.string().min(10).max(10).required().label("Phone"),
   techPassword: Joi.string().required().label("Password"),
   role: Joi.string().label("Role"),
 });

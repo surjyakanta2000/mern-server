@@ -35,18 +35,22 @@ const techSchema = mongoose.Schema({
   techAddress: {
     type: String,
     trim: true,
+    default: "",
   },
   techDOB: {
     type: String,
     trim: true,
+    default: "",
   },
   techAge: {
     type: String,
     trim: true,
+    default: "",
   },
   techGender: {
     type: String,
     trim: true,
+    default: "",
   },
   role: {
     type: String,

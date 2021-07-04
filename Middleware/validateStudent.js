@@ -8,7 +8,7 @@ const schema = Joi.object({
   studentDept: Joi.objectId().required().label("Student Department"),
   studentSemester: Joi.string().required().label("Student Semester"),
   studentEmail: Joi.string().required().label("Student Email"),
-  studentPhone: Joi.string().required().label("Student Phone"),
+  studentPhone: Joi.string().min(10).max(10).required().label("Student Phone"),
   studentPassword: Joi.string().required().label("Student Password"),
 });
 

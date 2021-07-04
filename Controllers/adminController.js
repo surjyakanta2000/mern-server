@@ -1,17 +1,37 @@
 const Admin = require("../Model/adminModel");
 const Notice = require("../Model/noticeModel");
+const bcrypt = require("bcryptjs");
 const path = require("path");
 const fs = require("fs");
 
 exports.addAdmin = async (req, res) => {
   const { adminName, adminEmail, adminPhone, adminPassword } = req.body;
-  await Admin.create({
-    adminName,
-    adminEmail,
-    adminPhone,
-    adminPassword,
-  });
-  res.status(200).send("Admin Created..");
+  await Admin.findOne({ adminEmail: adminEmail })
+    .then((adminData) => {
+      if (adminData) {
+        console.log("Email Already Exists");
+      }
+      return bcrypt
+        .hash(adminPassword, 12)
+        .then((hashPassword) => {
+          const AdminData = new Admin({
+            adminName: adminName,
+            adminEmail: adminEmail,
+            adminPhone: adminPhone,
+            adminPassword: hashPassword,
+          });
+          return AdminData.save();
+        })
+        .then((result) => {
+          res.status(200).send("Admin Created!");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 exports.getAdmin = async (req, res) => {
   const allAdmin = await Admin.find({}).select("-adminPassword");

@@ -1,16 +1,18 @@
 const Teacher = require("../Model/techModel");
+const bcrypt = require("bcryptjs");
 const path = require("path");
 const fs = require("fs");
 exports.addTeacher = async (req, res) => {
   const { techName, techDept, techEmail, techPhone, techPassword } = req.body;
+  const hashPassword = bcrypt.hashSync(techPassword, 12);
   await Teacher.create({
-    techName,
-    techDept,
-    techEmail,
-    techPhone,
-    techPassword,
+    techName: techName,
+    techDept: techDept,
+    techEmail: techEmail,
+    techPhone: techPhone,
+    techPassword: hashPassword,
   });
-  res.status(200).send("Teacher Created..");
+  res.json({ message: "success" });
 };
 
 exports.getTeacher = async (req, res) => {

@@ -42,6 +42,26 @@ const studentSchema = mongoose.Schema({
     type: String,
     trim: true,
   },
+  studentAddress: {
+    type: String,
+    trim: true,
+    default: "",
+  },
+  studentDOB: {
+    type: String,
+    trim: true,
+    default: "",
+  },
+  studentAge: {
+    type: String,
+    trim: true,
+    default: "",
+  },
+  studentGender: {
+    type: String,
+    trim: true,
+    default: "",
+  },
   role: {
     type: String,
     required: true,
@@ -49,9 +69,11 @@ const studentSchema = mongoose.Schema({
   },
   securityQuestion: {
     type: String,
+    default: "",
   },
   securityAnswer: {
     type: String,
+    default: "",
   },
 });
 const Student = mongoose.model("Student", studentSchema);
